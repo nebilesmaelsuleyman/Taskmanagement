@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Task;
+use App\Models\comment;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,10 +17,8 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
+        User::factory(10)->create([
             'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password')
 
         ]);
         User::factory()->create([
@@ -29,9 +28,12 @@ class DatabaseSeeder extends Seeder
             'admin'=>1
 
         ]);
-        Task::factory()->create([
+        Task::factory(10)->create([
             'taskCreator_id'=>User::factory(),
             'assigneduser_id'=>User::factory()
+
+        ]);
+        comment::factory(10)->create([
 
         ]);
 
