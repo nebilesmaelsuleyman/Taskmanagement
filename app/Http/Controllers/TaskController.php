@@ -9,8 +9,9 @@ use App\Models\User;
 class TaskController extends Controller
 {
    public function index(){
-    $tasks=Task::all();
+    $tasks=Task::search($request->search ?? '')->get();
     return view('task.layouts.app',compact('tasks'));
+    
    }
    public function create()
     {
@@ -21,9 +22,9 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $taskId=null)
 {
-    $request->validate([
+    $validatedData= $request->validate([
         'title' => 'required|string',
         'description' => 'required',
         'due_date' => 'required',
@@ -32,53 +33,60 @@ class TaskController extends Controller
 
     // Register new task
     try {
-        $new_task = new Task;
-        $new_task->title = $request->title;
-        $new_task->description = $request->description;
-        $new_task->due_date = $request->due_date;
+        //create new Task
+        $task= Task::updateOrCreate(['id'=>$taskId],$validatedData);
 
-        $new_task->save();
+       $message= $taskId?'Task updated succesfully':'Task created successfully';
+       $task->users()->attach($request->input('assigneduser_id'));
 
-        return redirect()->route('admin-page')->with('success', 'Successfully Added');
+        return redirect()->route('admin-page')->with('success', $message)->withInput();
     } catch (\Throwable $e) {
-        return redirect('/create')->with('fail', $e->getMessage());
+        return redirect()->back()->withErrors('error', $e->getMessage())->withInput();
     }
 }
-  
-
+// Show the form for editing the specified resource.
 public function editTask($taskId)
 {
     $task=Task::findOrFail($taskId);
-    return view('/edit/{id}',compact($task));
-}
+    //dd($task);
 
+    $assignedUsers =$task->users;
+   
+    // Retrieve all users (excluding those already assigned)
+    $availableUsers = User::wherenotIn('id', $assignedUsers->pluck('id'))->get();
+    return view('task.layouts.editTask',compact('task','assignedUsers','availableUsers'));
+}
     /**
      * Display the specified resource.
      */
-  
-
     /**
-     * Show the form for editing the specified resource.
+     * 
      */
-    public function edit()
-    {
-        //
-    }
+   
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
+    public function search(Request $request)
     {
-        //
+       // $query =$request ->input('query');
+        $tasks=Task::search($request->search ?? '')->get();
+        return view('task.layouts.app',compact('tasks'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function DeleteTask( $id)
     {
-        //
+        try{
+            Task::where('id',$id)->delete();
+            return redirect('/admin-page')->with('success','Task deleted succesfully');
+
+        }catch(\Exception $e){
+            return redirect('/admin-page')-with('fail', $e->getmessage());
+
+        }
     }
 }
 

@@ -22,7 +22,9 @@ Route::middleware('auth')->group(function () {
 Route::get('admin-page',[TaskController::class,'index'])->name('admin-page');
 Route::get('user-page',[userController::class, 'user']);
 Route::get('create',[TaskController::class , 'create']);
-Route::post('admin-page',[TaskController::class , 'store'])->name('AddTasks');
-Route::get('/tasks/{}/edit','TaskController@editTask');
+Route::post('/task/add',[TaskController::class , 'store'])->name('AddTasks');
+Route::get('/task/{id}/edit',[TaskController::class ,'editTask'])->name('EditTask');
+Route::get('/delete/{id}',[TaskController::class ,'deleteTask']);
+Route::get('search',[TaskController::class, 'search'])->name('search');
 
 require __DIR__.'/auth.php';

@@ -5,8 +5,21 @@
     {{-- here we will pass list of all users --}}
     <div class="container">
         <div class="card">
+        <form method="GET" action="{{route('admin-page')}}">
+                <div class="input-group mb-3">
+                  <input 
+                    type="text" 
+                    name="search"  
+                    class="form-control" 
+                    placeholder="Search..." 
+                    aria-label="Search" 
+                    aria-describedby="button-addon2">
+                <button class="btn btn-success" type="submit" id="button-addon2">Search</button>
+                </div>
+            </form>
+      
             <div class="card-header">
-               Add new Tasks
+            Add  new Tasks
                 <a href="/create" class="btn btn-success btn-sm float-end">Add New</a>
             </div>
             @if (Session::has('success'))
@@ -16,7 +29,7 @@
                 <span class="alert alert-danger p-2">{{Session::get('fail')}}</span>
             @endif
             <div class="card-body">
-                <table class="table table-sm table-striped table-bordered">
+                <table class="table table-striped table-bordered">
                     <thead>
                         <th>title</th>
                         <th>description</th>
@@ -40,7 +53,7 @@
                     <td>{{$task->status}}</td>
                     <td>{{$task->created_at}}</td>
                     <td>{{$task->updated_at}}</td>
-                    <td><a href="/edit/{{$task->id}}" class="btn btn-primary btn-sm">Edit</a></td>
+                    <td><a href="/task/{{$task->id}}/edit" class="btn btn-primary btn-sm">Edit</a></td>
                     <td><a href="/delete/{{$task->id}}" class="btn btn-danger btn-sm">Delete</a></td>
                                 </tr>    
                             @endforeach

@@ -18,8 +18,6 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         User::factory(10)->create([
-            'name' => 'Test User',
-
         ]);
         User::factory()->create([
             'name'=>'admin',
@@ -29,13 +27,9 @@ class DatabaseSeeder extends Seeder
 
         ]);
         Task::factory(10)->create([
-            'taskCreator_id'=>User::factory(),
-            'assigneduser_id'=>User::factory()
+            'created_by'=>user::factory(),
+            'assigned_to'=>User::factory()
 
         ]);
-        comment::factory(10)->create([
-
-        ]);
-
     }
 }
