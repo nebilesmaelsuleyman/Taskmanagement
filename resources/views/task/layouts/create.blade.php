@@ -77,13 +77,14 @@
               <span class="text-danger">{{$message}}</span>
             @enderror
           </div>
-         <div class="mb-3">
-             <label for="formGroupExampleInput2" class="form-label">Assigned To</label>
+        <div class="mb-3">
+            <label for="formGroupExampleInput2" class="form-label">Assigned To</label>
             <select name="assigneduser_id" class="form-control"id="">
                 <option value="{{old('')}}">Select user</option>
                 @foreach($users as $user)
                 <option value="{{$user->id}}">{{$user->name}}</option>
                 @endforeach
             </select>
-         </div> 
-         <button  type="submit"  class="btn btn-primary"> save</button>
+        </div> 
+        <button  type="submit"  class="btn btn-primary"> save</button>
+

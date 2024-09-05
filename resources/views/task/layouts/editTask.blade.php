@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <title>Edit Tasks</title>
   <style>
@@ -54,44 +55,38 @@
         <span class="alert alert-danger p-2">{{Session::get('fail')}}</span>
       @endif
       <div class="card-body">
-        <form action="{{ route('EditTask')}}" method="post">
+        <form action="{{ route('UpdateTask', $task->id)}}" method="post">
           @csrf
+          @method ('PUT')
           <div class="mb-3">
             <label for="formGroupExampleInput" class="form-label">Title</label>
-            <input type="text" name="title" value="{{old('title')}}" class="form-control" id="formGroupExampleInput" placeholder="Enter Title">
+            <input type="text" name="title" value="{{$task->title}}" class="form-control" id="formGroupExampleInput" placeholder="Enter Title">
             @error('title')
               <span class="text-danger">{{$message}}</span>
             @enderror
           </div>
           <div class="mb-3">
             <label for="formGroupExampleInput2" class="form-label">Description</label>
-            <textarea name="description" value="{{old('description')}}" class="form-control" id="formGroupExampleInput" placeholder="Enter Description"></textarea>
+            <textarea name="description" value="{{$task->description}}" class="form-control" id="formGroupExampleInput" placeholder="Enter Description"></textarea>
             @error('description')
               <span class="text-danger">{{$message}}</span>
             @enderror
           </div>
           <div class="mb-3">
             <label for="formGroupExampleInput2" class="form-label">Due Date</label>
-            <input type="date" name="due_date" value="{{old('due_date')}}" class="form-control" id="formGroupExampleInput2" placeholder="Select Due Date">
+            <input type="date" name="due_date" value="{{$task->due_date}}" class="form-control" id="formGroupExampleInput2" placeholder="Select Due Date">
             @error('due_date')
               <span class="text-danger">{{$message}}</span>
             @enderror
           </div>
           <div class="mb-3">
-    <label for="formGroupExampleInput2" class="form-label">Assigned Users:</label>
-    <ul id="assigned-users">
-        </ul>
-</div>
-
-<div class="mb-3">
-    <label for="formGroupExampleInput2" class="form-label">Available Users:</label>
-    <select name="available_user[]" class="form-control" multiple>
-        <option value="">Select user</option>
-        @foreach($availableUsers as $user)
-            <option value="{{ $user->id }}">{{ $user->name }}</option>
-        @endforeach
-    </select>
-</div>
-
-<button type="button" class="btn btn-primary" id="add-user-btn">Add User</button>
-         <button  type="submit"  class="btn btn-primary"> save</button>
+            <label for="formGroupExampleInput2" class="form-label">Assigned To</label>
+            <select name="assigneduser_id" class="form-control"id="">
+                <option value="{{old('')}}">Select user</option>
+                @foreach($users as $user)
+                <option value="{{$user->id}}">{{$user->name}}</option>
+                @endforeach
+            </select>
+          </div>
+            <button  type="submit"  class="btn btn-primary">update</button>
+            </form

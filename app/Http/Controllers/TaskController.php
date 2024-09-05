@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
+
 use App\Models\User;
 
 class TaskController extends Controller
 {
    public function index(){
-    $tasks=Task::search($request->search ?? '')->get();
+    $tasks=Task::all();
     return view('task.layouts.app',compact('tasks'));
     
    }
@@ -22,7 +23,7 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $taskId=null)
+    public function store(Request $request)
 {
     $validatedData= $request->validate([
         'title' => 'required|string',
@@ -34,27 +35,34 @@ class TaskController extends Controller
     // Register new task
     try {
         //create new Task
-        $task= Task::updateOrCreate(['id'=>$taskId],$validatedData);
-
-       $message= $taskId?'Task updated succesfully':'Task created successfully';
-       $task->users()->attach($request->input('assigneduser_id'));
-
-        return redirect()->route('admin-page')->with('success', $message)->withInput();
+        Task::create($validatedData);
+        return redirect()->route('admin-page')->with('success','TAsk created succesfully');
     } catch (\Throwable $e) {
-        return redirect()->back()->withErrors('error', $e->getMessage())->withInput();
+        return redirect()->back()->withErrors('error', 'failed to add tasl');
     }
 }
 // Show the form for editing the specified resource.
 public function editTask($id)
 {
     $task=Task::find($id);
-    //dd($task);
 
-    $assignedUsers =$task->users;
-   
-    // Retrieve all users (excluding those already assigned)
-    $availableUsers = User::wherenotIn('id', $assignedUsers->pluck('id'))->get();
-    return view('task.layouts.editTask',compact('task','assignedUsers','availableUsers'));
+    $users=User::all();
+    return view('task.layouts.editTask',compact('task','users'));
+}
+
+public function Update(Request $request, Task $task)
+{
+    $validatedData=$request->validate([
+        'title' => 'required|string',
+        'description' => 'required',
+        'due_date' => 'required',
+        'assigneduser_id' => 'required'
+    ]);
+  
+
+    $task->update($validatedData);
+
+    return redirect()->route('admin-page')->with('success', 'Post updated successfully');
 }
     /**
      * Display the specified resource.
@@ -62,7 +70,7 @@ public function editTask($id)
     /**
      * 
      */
-   
+
 
     /**
      * Update the specified resource in storage.
@@ -77,7 +85,7 @@ public function editTask($id)
     /**
      * Remove the specified resource from storage.
      */
-    public function DeleteTask( $id)
+    public function DeleteTask($id)
     {
         try{
             Task::where('id',$id)->delete();

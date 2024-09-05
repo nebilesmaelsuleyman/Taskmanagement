@@ -7,7 +7,7 @@
         <div class="card">
         <form method="GET" action="{{route('admin-page')}}">
                 <div class="input-group mb-3">
-                  <input 
+                <input 
                     type="text" 
                     name="search"  
                     class="form-control" 
@@ -17,7 +17,6 @@
                 <button class="btn btn-success" type="submit" id="button-addon2">Search</button>
                 </div>
             </form>
-      
             <div class="card-header">
             Add  new Tasks
                 <a href="/create" class="btn btn-success btn-sm float-end">Add New</a>
@@ -53,15 +52,24 @@
                     <td>{{$task->status}}</td>
                     <td>{{$task->created_at}}</td>
                     <td>{{$task->updated_at}}</td>
-                   <td> <a href="/task/{id}/edit" class="btn btn-success btn-sm float-end">Edit</a></td>
-                    <td><a href="/delete/{{$task->id}}" class="btn btn-danger btn-sm">Delete</a></td>
-                                </tr>    
+                    <td>
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ route('EditTask', $task->id) }}" class="btn btn-primary btn-sm">Edit</a>
+                            <form action="{{ route('DeleteTask', $task->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                    </tr>    
                             @endforeach
                         @else
                             <tr>
                                 <td colspan="8">No User Found!</td>
                             </tr>
                         @endif
+                        
                     </tbody>
                 </table>
             </div>

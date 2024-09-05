@@ -23,8 +23,9 @@ Route::get('admin-page',[TaskController::class,'index'])->name('admin-page');
 Route::get('user-page',[userController::class, 'user']);
 Route::get('create',[TaskController::class , 'create']);
 Route::post('/task/add',[TaskController::class , 'store'])->name('AddTasks');
-Route::post('/task/{id}/edit',[TaskController::class ,'editTask'])->name('EditTask');
-Route::delete('/delete/{id}',[TaskController::class ,'deleteTask']);
+Route::get('/EditTask/{id}/',[TaskController::class ,'editTask'])->name('EditTask');
+Route::put('/postTasks',[TaskController::class ,'update'])->name('UpdateTask');
+Route::delete('/delete/{id}',[TaskController::class ,'DeleteTask'])->name('DeleteTask');
 Route::get('search',[TaskController::class, 'search'])->name('search');
 
 require __DIR__.'/auth.php';
