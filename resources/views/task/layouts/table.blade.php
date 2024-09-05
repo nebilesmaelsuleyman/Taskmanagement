@@ -53,7 +53,7 @@
                     <td>{{$task->status}}</td>
                     <td>{{$task->created_at}}</td>
                     <td>{{$task->updated_at}}</td>
-                    <td><a href="/task/{{$task->id}}/edit" class="btn btn-primary btn-sm">Edit</a></td>
+                   <td> <a href="/task/{id}/edit" class="btn btn-success btn-sm float-end">Edit</a></td>
                     <td><a href="/delete/{{$task->id}}" class="btn btn-danger btn-sm">Delete</a></td>
                                 </tr>    
                             @endforeach

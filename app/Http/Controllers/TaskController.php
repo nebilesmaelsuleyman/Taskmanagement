@@ -45,9 +45,9 @@ class TaskController extends Controller
     }
 }
 // Show the form for editing the specified resource.
-public function editTask($taskId)
+public function editTask($id)
 {
-    $task=Task::findOrFail($taskId);
+    $task=Task::find($id);
     //dd($task);
 
     $assignedUsers =$task->users;
